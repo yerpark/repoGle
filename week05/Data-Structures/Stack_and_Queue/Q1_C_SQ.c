@@ -116,12 +116,96 @@ int main()
 
 void createQueueFromLinkedList(LinkedList *ll, Queue *q)
 {
-	/* add your code here */
+	// linked list에 있는 원소들을 복사해서 새로운 링크드리스트를 만드는 것으로 정의
+
+	// README에 "Basic functionalities like POP/PUSH/DEQUEUE/ENQUEUE/REMOVE_LINKED_NODE/FIND_LINKED_NODE are already provided in the main frame. 
+	// You don't need to write these basic functions."라고 적혀있어서 그냥 있는 함수 사용
+	// Remember to empty the queue at the beginning, if the queue is not empty
+
+	ListNode	*cur;
+
+	if (!ll || !q)
+		return ;
+
+	// queue 비워주기 -> 비워져있다면 RemoveAllItems에서 아무것도 안함
+	removeAllItems(&(q->ll));
+
+	// linked list 순회하면서 enqueue 진행 
+	cur = ll->head;
+	while (cur)
+	{
+		enqueue(q, cur->item);
+		cur = cur->next;
+	}
+
 }
 
 void removeOddValues(Queue *q)
 {
-	/* add your code here */
+	// 이 함수 문제의 의도?
+		// 큐 구현이 main이니까 홀수 값들을 제거하는 것도 큐 방식을 따라야 하나?
+			// 큐 방식을 따라서 enqueue, dequeue 사용하면 탐색 시간 Up
+			// 근데 아래 내가 구현한 것처럼 연결리스트 그대로 쓰면 그건 큐 자료구조가 아님
+
+
+	// removeNode 쓰면서 계속 탐색해야하니까 그냥 노드 포인터 따로 들고 관리
+	// 홀수인지 검사
+		// 첫번째 노드면 head 업데이트
+		// 아니면 앞 뒤 연결 재조정
+	
+	// 연결리스트 직접 수정 버전
+	ListNode	*pre;
+	ListNode	*cur;
+	ListNode	*next;
+
+	if (!q)
+		return ;
+
+	pre = NULL;
+	cur = q->ll.head;
+	while(cur)
+	{
+		if (cur->item % 2 != 0)
+		{
+			next = cur->next;
+			if (cur == q->ll.head) // head 재조정
+			{
+				q->ll.head = next;
+				pre = NULL;
+			}
+			else // 앞->뒤 연결 재조정
+				pre->next = next;
+
+			free (cur);
+			q->ll.size--;
+			cur = next;
+		}
+		else
+		{
+			pre = cur;
+			cur = cur->next;
+		}
+	}
+
+	// 큐 자료구조 활용해서 삭제
+	// int		curItem; 
+	// int		i;
+	// int		iterSize;
+
+	// if (!q)
+	// 	return ;
+
+	// i = 0;
+	// iterSize = q->ll.size;
+	// while (q->ll.head && i < iterSize)
+	// {
+	// 	curItem = dequeue(q);
+	// 	if (curItem == -1)
+	// 		return ;
+	// 	if (curItem % 2 == 0)
+	// 		enqueue(q, curItem);
+	// 	i++;
+	// }
 }
 
 //////////////////////////////////////////////////////////////////////////////////

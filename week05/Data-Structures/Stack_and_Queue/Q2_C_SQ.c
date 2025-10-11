@@ -113,12 +113,83 @@ int main()
 
 void createStackFromLinkedList(LinkedList *ll, Stack *s)
 {
-    /* add your code here */
+    // 스택 구조 유추 -> 스택의 탑이 linked list의 head
+	// 링크드 리스트의 노드 주소를 갱신하는 식으로 스택에 추가
+	ListNode	*cur;
+
+	if (!ll || !s)
+		return ;
+	
+	// stack 초기화 - 비워질게 없다면 아무 일도 하지 않음
+	removeAllItems(&(s->ll));
+
+	cur = ll->head;
+	while(cur)
+	{
+		push(s, cur->item);
+		cur = cur->next;
+	}
 }
 
 void removeEvenValues(Stack *s)
 {
-	/* add your code here */
+	// 두가지 방식으로 구현 가능 
+		// 연결리스트 직접 수정
+		// 스택의 추상화 지키면서 pop, push 이용해서 삭제 => 시간복잡도 증가
+	
+	//연결리스트 직접 수정
+	ListNode	*pre; 
+	ListNode	*cur;
+	ListNode	*next;
+	
+	if (!s)
+		return ;
+
+	pre = NULL;
+	cur = s->ll.head;
+	while (cur)
+	{
+		if (cur->item % 2 == 0)
+		{
+			next = cur->next;
+			if (cur == s->ll.head)
+			{
+				s->ll.head = next;
+				pre = NULL;
+			}
+			else
+				pre->next = next;
+			free (cur);
+			s->ll.size--;
+			cur = next;
+		}
+		else
+		{
+			pre = cur;
+			cur = cur->next;
+		}
+	}
+
+	// 스택 - pop, push 이용해서 삭제
+		// 지역 스택을 하나 더 만들어야 함 
+	// Stack		tmpStack;
+	// int			curItem;
+	
+	// if (!s)
+	// 	return ;
+
+	// tmpStack.ll.head = NULL;
+	// tmpStack.ll.size = 0;
+
+	// while (s->ll.head)
+	// {
+	// 	curItem = pop(s);
+	// 	if (curItem % 2 != 0)
+	// 		push(&tmpStack, curItem);
+	// }
+
+	// while(tmpStack.ll.head)
+	// 	push(s, pop(&tmpStack));
 }
 
 //////////////////////////////////////////////////////////////////////////////////

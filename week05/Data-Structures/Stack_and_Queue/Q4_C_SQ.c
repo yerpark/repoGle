@@ -112,7 +112,23 @@ int main()
 
 void reverse(Queue *q)
 {
-/* add your code here */
+	// 지역 스택 생성 - 초기화
+	// 큐에 있는 걸 하나씩 dequeue해서 stack에 Push
+	// 다 끝나면 스택에 있는 걸 하나씩 pop해서 queue에 enqueue
+
+	Stack	tmpStack;
+
+	if (!q)
+		return ;
+	
+	tmpStack.ll.head = NULL;
+	tmpStack.ll.size = 0;
+
+	while (q->ll.head)
+		push(&tmpStack, dequeue(q));
+	
+	while (tmpStack.ll.head)
+		enqueue(q, pop(&tmpStack));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

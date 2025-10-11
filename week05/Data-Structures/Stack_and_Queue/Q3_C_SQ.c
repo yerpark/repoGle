@@ -103,7 +103,46 @@ int main()
 
 int isStackPairwiseConsecutive(Stack *s)
 {
-  /* add your code here */
+	// pairwise -> 모든 쌍이 인접한 경우 
+	// 모든 원소들이 인접할 필요 X
+	// stack의 top에서부터 한쌍씩 묶어서 확인
+	// pairwise면 1 리턴, 아니면 0 리턴
+	// 확인하는 함수니까 스택 상태 원상복구 필요
+		// 사실 이 문제에서는 바로 뒤에 다 지워서 필요없긴 하지만, 
+		// 일반적으로 생각했을 때 복구하는게 맞다 생각이 들어 저런 방식으로 짬 
+
+	// 먼저 s의 size를 확인해서 홀수면 0 리턴
+	// 지역 스택 만들어서 pop한 애들 담고 다시 push
+
+	Stack		tmpStack;
+	int			pair1;
+	int			pair2;
+	int			res;
+
+	if (!s || s->ll.size % 2 != 0)
+		return (0);
+
+	tmpStack.ll.head = NULL;
+	tmpStack.ll.size = 0;
+	res = 1; //기본이 1, 틀리면 0으로 바꾸기 
+
+	while (s->ll.head)
+	{
+		pair1 = pop(s);
+		pair2 = pop(s); //위에서 홀수 개수 걸렀기 때문에 head가 null이 아닌 이상 다 꺼내진다 가정
+		push(&tmpStack, pair1);
+		push(&tmpStack, pair2);
+		if (pair1 - pair2 != 1 && pair1 - pair2 != -1)
+		{
+			res = 0;
+			break ;
+		}
+	}
+
+	while(tmpStack.ll.head)
+		push(s, pop(&tmpStack));
+	
+	return (res);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

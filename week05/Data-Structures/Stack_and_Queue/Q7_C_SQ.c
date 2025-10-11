@@ -48,6 +48,8 @@ ListNode * findNode(LinkedList *ll, int index);
 int insertNode(LinkedList *ll, int index, int value);
 int removeNode(LinkedList *ll, int index);
 
+int	getMatchingBracket(int bracket);
+
 //////////////////////////// main() //////////////////////////////////////////////
 
 int main()
@@ -102,9 +104,61 @@ int main()
 }
 
 ////////////////////////////////////////////////////////////
+
+int	getMatchingBracket(int bracket)
+{
+	if (bracket == ')')
+		return ('(');
+	else if (bracket == ']')
+		return ('[');
+	else if (bracket == '}')
+		return ('{');
+	else
+		return (MIN_INT);
+}
+
 int balanced(char *expression)
 {
-/* add your code here */
+	// 이제는 main문에 지워주는 함수 없으니까 내가 스스로 지워야 함 
+		// removeAllItemsFromStack 사용
+		// 아니면 누수.. valgrind check
+	// char *니까 segfault 주의. '\0' check
+	// expression이 null이면? 균형맞다고 판단
+	
+	// 균형 맞으면 1 리턴 아니면 0 리턴하는 함수
+	// 지역 스택 만들어서 괄호 넣기
+		// 일치하는 쌍일때만 pop 아니면 리턴
+	Stack	tmpStack;
+	int		res;
+	int		i;
+	 
+	if (!expression) //확인해야 아래 while문에서 segfault 안남
+		return (1);
+	
+	tmpStack.ll.head = NULL;
+	tmpStack.ll.size = 0;
+
+	res = 0; //균형맞는 상태로 초기화. 아닐때 1로 바꿈
+	i = 0;
+	while(expression[i])
+	{
+		if (expression[i] == ')' || expression[i] == ']' || expression[i] == '}')
+		{
+			if (pop(&tmpStack) != getMatchingBracket(expression[i]))
+			{
+				res = 1;
+				break ;
+			}
+		}
+		else //문자열의 모든 문자는 ()[]{}중 하나라 가정.. 
+			push(&tmpStack, expression[i]); //char -> int로 자동승격됨
+		i++;
+	}
+
+	if (!res && tmpStack.ll.head)
+		res = 1;
+	removeAllItemsFromStack(&tmpStack);
+	return (res);
 }
 
 ////////////////////////////////////////////////////////////

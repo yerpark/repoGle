@@ -109,7 +109,20 @@ int main()
 
 void recursiveReverse(Queue *q)
 {
-/* add your code here */
+	//재귀적으로 뒤집어야 하는데. . . 어떻게 뒤집을 것인지..
+	//재귀 함수 호출 전 / 후 분리하면 가능
+	//dequeue해서 원소 킵해뒀다가 재귀호출, 호출이 끝나면 enqueue
+
+	int		item;
+
+	if (!q || !(q->ll.head))
+		return ;
+	
+	item = dequeue(q);
+
+	recursiveReverse(q);
+
+	enqueue(q, item);
 }
 
 //////////////////////////////////////////////////////////////////

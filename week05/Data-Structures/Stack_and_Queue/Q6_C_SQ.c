@@ -111,7 +111,19 @@ int main()
 
 void removeUntil(Stack *s, int value)
 {
-/* add your code here */
+	// stack의 top부터 보면서 value를 만나기 전의 원소들을 다 제거하는 함수
+	// peek로 값을 확인하고 value를 만날때까지 pop, 만나면 stop
+
+	if (!s || !(s->ll.head))
+		return ;
+	
+	while (s->ll.head)
+	{
+		if (s->ll.head->item != value)
+			pop(s);
+		else
+			break ;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
