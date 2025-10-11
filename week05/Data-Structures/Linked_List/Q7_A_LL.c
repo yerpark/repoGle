@@ -87,7 +87,21 @@ int main()
 
 void RecursiveReverse(ListNode **ptrHead)
 {
-	/* add your code here */
+	ListNode	*ogHead;
+	ListNode	*next;
+
+	// 예외처리 + base 종료조건 -> node next 연결 재설정
+	if (!ptrHead || !(*ptrHead) || !((*ptrHead)->next))
+		return ;
+	
+	ogHead = *ptrHead;
+	next = ogHead->next;
+	*ptrHead = next;
+
+	RecursiveReverse(ptrHead);
+
+	next->next = ogHead;
+	ogHead->next = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

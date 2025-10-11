@@ -86,9 +86,47 @@ int main()
 
 ////////////////////////////////////////////////////////////////////////
 
-int moveMaxToFront(ListNode **ptrHead)
+int moveMaxToFront(ListNode **ptrHead) //return type 왜 int지?? 
 {
-    /* add your code here */
+    // 더블 포인터
+	// 원래 head 따로 저장 필요 
+	
+	// 순회하면서 가장 큰 노드 갱신, 노드의 전 노드도 저장
+		// 연결 끊어야 함 
+	
+	ListNode	*ogHead;
+	ListNode	*preMax;
+	ListNode	*max;
+	ListNode	*pre;
+	ListNode	*cur;
+
+	if (!ptrHead || !(*ptrHead))
+		return (-1);
+
+	ogHead = *ptrHead;
+	preMax = NULL;
+	max = ogHead;
+	pre = NULL;
+	cur = ogHead;
+
+	while (cur)
+	{
+		if (max->item < cur->item)
+		{
+			preMax = pre;
+			max = cur;
+		}
+		pre = cur;
+		cur = cur->next;
+	}
+
+	if (preMax != NULL)
+		preMax->next = max->next;
+	
+	max->next = ogHead;
+	*ptrHead = max;	
+
+	return (max->item);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

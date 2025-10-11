@@ -57,6 +57,7 @@ int main()
 	printf("1: Insert an integer to the linked list:\n");
 	printf("2: Split the linked list into two linked lists, frontList and backList:\n");
 	printf("0: Quit:\n");
+	c = 1;
 
 	while (c != 0)
 	{
@@ -102,7 +103,56 @@ int main()
 
 void frontBackSplitLinkedList(LinkedList *ll, LinkedList *resultFrontList, LinkedList *resultBackList)
 {
-	/* add your code here */
+	// size 신경써야 함 ..  
+	// 분리 지점을 잘 파악해야 
+	
+	// 원소가 없거나 ll이 null이면 Return 
+	// frontList의 끝 노드 찾기
+		// 원소의 개수가 홀수 : size/2
+		// 원소의 개수가 짝수 : size/2 - 1
+	// frontList의 끝 원소 찾으면 -> 연결 분리 작업 필요
+		// backList의 시작 노드 -> 위에서 구한 노드->next
+		// 둘의 연결 끊기
+		// 각각의 head에 연결
+		// 각각 리스트 size 초기화
+			// 원소의 개수가 홀수 : front size/2 + 1, back size/2
+			// 원소의 개수가 짝수 : front size/2, back size/2
+	// ll 초기화
+	
+	ListNode	*frontTailNode;
+	ListNode	*backHeadNode;
+	int			frontListSize;
+	int			backListSize;
+
+	if (!ll || !(ll->head))
+		return ;
+
+	if (ll->size % 2 == 0)
+		frontListSize = ll->size / 2;
+	else
+		frontListSize = (ll->size / 2) + 1;
+	backListSize = ll->size - frontListSize;
+
+	frontTailNode = findNode(ll, frontListSize - 1);
+	if (!frontTailNode)
+		return ;
+	backHeadNode = frontTailNode->next;
+
+	// frontList setting
+	resultFrontList->head = ll->head;
+	resultFrontList->size = frontListSize;
+	frontTailNode->next = NULL;
+
+	// backList setting
+	if (backHeadNode)
+	{
+		resultBackList->head = backHeadNode;
+		resultBackList->size = backListSize;
+	}
+
+	// ll 초기화 (연결 끊기 - double free 방지)
+	ll->head = NULL;
+	ll->size = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

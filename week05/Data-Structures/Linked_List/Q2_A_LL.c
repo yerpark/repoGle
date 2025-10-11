@@ -35,6 +35,8 @@ ListNode *findNode(LinkedList *ll, int index);
 int insertNode(LinkedList *ll, int index, int value);
 int removeNode(LinkedList *ll, int index);
 
+ListNode	*findNodeAndInitConnection(LinkedList *ll, int index);
+int			insertExistingNode(LinkedList *ll, int index, ListNode *node);
 
 //////////////////////////// main() //////////////////////////////////////////////
 
@@ -63,37 +65,37 @@ int main()
 
 		switch (c)
 		{
-		case 1:
-			printf("Input an integer that you want to add to the linked list 1: ");
-			scanf("%d", &i);
-			j = insertNode(&ll1, ll1.size, i);
-			printf("Linked list 1: ");
-			printList(&ll1);
-			break;
-		case 2:
-			printf("Input an integer that you want to add to the linked list 2: ");
-			scanf("%d", &i);
-			j = insertNode(&ll2, ll2.size, i);
-			printf("Linked list 2: ");
-			printList(&ll2);
-			break;
-		case 3:
-		    printf("The resulting linked lists after merging the given linked list are:\n");
-			alternateMergeLinkedList(&ll1, &ll2); // You need to code this function
-			printf("The resulting linked list 1: ");
-			printList(&ll1);
-			printf("The resulting linked list 2: ");
-			printList(&ll2);
-			removeAllItems(&ll1);
-			removeAllItems(&ll2);
-			break;
-		case 0:
-			removeAllItems(&ll1);
-			removeAllItems(&ll2);
-			break;
-		default:
-			printf("Choice unknown;\n");
-			break;
+			case 1:
+				printf("Input an integer that you want to add to the linked list 1: ");
+				scanf("%d", &i);
+				j = insertNode(&ll1, ll1.size, i);
+				printf("Linked list 1: ");
+				printList(&ll1);
+				break;
+			case 2:
+				printf("Input an integer that you want to add to the linked list 2: ");
+				scanf("%d", &i);
+				j = insertNode(&ll2, ll2.size, i);
+				printf("Linked list 2: ");
+				printList(&ll2);
+				break;
+			case 3:
+				printf("The resulting linked lists after merging the given linked list are:\n");
+				alternateMergeLinkedList(&ll1, &ll2); // You need to code this function
+				printf("The resulting linked list 1: ");
+				printList(&ll1);
+				printf("The resulting linked list 2: ");
+				printList(&ll2);
+				removeAllItems(&ll1);
+				removeAllItems(&ll2);
+				break;
+			case 0:
+				removeAllItems(&ll1);
+				removeAllItems(&ll2);
+				break;
+			default:
+				printf("Choice unknown;\n");
+				break;
 		}
 	}
 	return 0;
@@ -101,9 +103,102 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
+ListNode	*findNodeAndInitConnection(LinkedList *ll, int index)
 {
-    /* add your code here */
+	ListNode	*cur;
+	ListNode	*pre;
+
+	if (ll == NULL || ll->head == NULL || index < 0 || index >= ll->size)
+		return (NULL);
+	
+	cur = ll->head;
+	// head 재조정 필요
+	if (index == 0) 
+	{
+		pre = NULL;
+		if (ll->size == 1)
+			ll->head = NULL;
+		else
+			ll->head = cur->next;
+	}
+
+	while (index > 0)
+	{
+		pre = cur;
+		cur = cur->next;
+		if (cur == NULL)
+			return (NULL);
+		index--;
+	}
+
+	// 다음 노드 연결 
+	if (pre != NULL)
+		pre->next = cur->next;
+
+	cur->next = NULL;
+	ll->size--;
+
+	return (cur);
+}
+
+int			insertExistingNode(LinkedList *ll, int index, ListNode *node)
+{
+	// 2번 문제에서만 의미있는 함수로 작성, head pointer가 바뀔 일이 없으니 관련해서 고려 X
+	ListNode	*pre;
+	ListNode	*cur;
+
+	if (ll == NULL || node == NULL || index < 0 || index > ll->size + 1)
+		return (-1);
+	
+	if ((pre = findNode(ll, index - 1)) != NULL)
+	{
+		cur = pre->next; 
+		pre->next = node;
+		node->next = cur;
+		ll->size++;
+		return (0);
+	}
+	
+	return (-1);
+}
+
+
+void 		alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
+{
+	// linked list1의 alternate position(사이사이)에 list 2의 원소 넣기
+		// 즉, ll2의 idx번째 원소는 ll1의 idx번째 원소 뒤에 들어감 
+		// ll1.size >= ll2 -> ll2 원소 다 들어감 
+	
+	// 뒤에서부터 추가하면 삽입함으로써 생기는 idx 흐트러짐이 사라지지 않을까?
+	// 있는 노드 재활용? 아니면 해제 -> 새로 할당?? 
+
+	// get insert starting point
+	int			idx;
+	ListNode	*tmp;
+
+	if (ll1->size == 0)
+		return ;
+	
+	if (ll1->size >= ll2->size)
+		idx = ll2->size - 1;
+	else
+		idx = ll1->size - 1;
+	
+
+	// merge start ! 
+	while (idx >= 0)
+	{
+		tmp = findNodeAndInitConnection(ll2, idx);
+		if (tmp == NULL)
+			return ;
+		if (insertExistingNode(ll1, idx + 1, tmp) == -1)
+		{
+			free (tmp); //삽입 실패시 유실 노드 해제
+			return ;
+		}
+		idx--;
+	}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

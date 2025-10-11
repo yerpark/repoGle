@@ -35,6 +35,8 @@ ListNode * findNode(LinkedList *ll, int index);
 int insertNode(LinkedList *ll, int index, int value);
 int removeNode(LinkedList *ll, int index);
 
+ListNode	*getLastNodeAndCheck(LinkedList *ll, int *allEvenNumFlag, int *evenCount);
+
 //////////////////////////// main() //////////////////////////////////////////////
 
 int main()
@@ -84,9 +86,70 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
+ListNode	*getLastNodeAndCheck(LinkedList *ll, int *allEvenNumFlag, int *evenCount)
+{
+	ListNode	*last;
+
+	if (!ll || !(ll->head))
+		return (NULL);
+
+	last = ll->head;
+	while (last)
+	{
+		if (last->item % 2 == 0)
+			(*evenCount)++;
+		else if (*allEvenNumFlag)
+			*allEvenNumFlag = 0;
+		if (!(last->next))
+			break ;
+		last = last->next;
+	}
+	return (last);
+}
+
 void moveEvenItemsToBack(LinkedList *ll)
 {
-	/* add your code here */
+	ListNode	*pre;
+	ListNode	*cur;
+	ListNode	*next;
+	ListNode	*last;
+	int			allEvenNumFlag;
+	int			evenCount;
+
+	if (!ll || !(ll->head) || ll->size <= 1)
+		return ;
+	
+	// 마지막 노드 위치 탐색 & 모든 원소가 짝수인지 검색 
+	allEvenNumFlag = 1;
+	evenCount = 0;
+	last = getLastNodeAndCheck(ll, &allEvenNumFlag, &evenCount);
+	if (!last || allEvenNumFlag || !evenCount)
+		return ;
+
+	// find 짝수 원소
+	pre = NULL;
+	cur = ll->head;
+	while(cur && evenCount) //evenCount -> 무한루프 방지 
+	{
+		next = cur->next;
+		if (cur->item % 2 == 0)
+		{
+			if (cur == ll->head)
+				ll->head = next;
+			if (pre != NULL)
+				pre->next = next;
+			last->next = cur;
+			cur->next = NULL;
+			last = cur;
+			cur = next;
+			evenCount--;
+		}
+		else
+		{
+			pre = cur;
+			cur = next;
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

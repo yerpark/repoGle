@@ -90,7 +90,34 @@ int main()
 
 int insertSortedLL(LinkedList *ll, int item)
 {
-	/* add your code here */
+	// item 값을 가지는 노드를 ll에 삽입 
+		// 삽입 실패 -> -1 리턴
+			// 삽입 실패의 경우: 해당 값이 이미 리스트에 있는 경우, 삽입 실패의 경우
+		// 삽입 성공 -> 추가한 idx값 리턴
+
+	ListNode	*cur;
+	ListNode	*tmp;
+	int			idx;
+
+	// search item
+	idx = 0;
+	cur = ll->head;
+	while (cur)
+	{
+		tmp = cur->next;
+		if (cur->item == item)
+			return (-1);
+		else if (cur->item > item) //정렬된 리스트기때문에 자기보다 크면 탐색 종료
+			break;
+		cur = tmp;
+		idx++;
+	}
+
+	// insert node
+	if (insertNode(ll, idx, item) == -1)
+		return (-1);
+	//ll->size++;
+	return (idx);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

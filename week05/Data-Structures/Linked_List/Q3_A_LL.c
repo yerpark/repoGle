@@ -27,13 +27,15 @@ typedef struct _linkedlist
 //////////////////////// function prototypes /////////////////////////////////////
 
 // You should not change the prototype of this function
-void moveOddItemsToBack(LinkedList *ll);
+void 		moveOddItemsToBack(LinkedList *ll);
 
-void printList(LinkedList *ll);
-void removeAllItems(LinkedList *ll);
-ListNode * findNode(LinkedList *ll, int index);
-int insertNode(LinkedList *ll, int index, int value);
-int removeNode(LinkedList *ll, int index);
+void 		printList(LinkedList *ll);
+void 		removeAllItems(LinkedList *ll);
+ListNode 	*findNode(LinkedList *ll, int index);
+int 		insertNode(LinkedList *ll, int index, int value);
+int		 	removeNode(LinkedList *ll, int index);
+
+ListNode	*getLastNodeAndCheck(LinkedList *ll, int *allOddNumFlag, int *oddCount);
 
 //////////////////////////// main() //////////////////////////////////////////////
 
@@ -84,9 +86,75 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
+ListNode	*getLastNodeAndCheck(LinkedList *ll, int *allOddNumFlag, int *oddCount)
+{
+	ListNode	*last;
+
+	if (!ll || !(ll->head))
+		return (NULL);
+
+	last = ll->head;
+	while (last)
+	{
+		if (last->item % 2 != 0)
+			(*oddCount)++;
+		else if (*allOddNumFlag)
+			*allOddNumFlag = 0;
+		if (!(last->next))
+			break ;
+		last = last->next;
+	}
+	return (last);
+}
+
 void moveOddItemsToBack(LinkedList *ll)
 {
-	/* add your code here */
+	// 홀수 원소들을 맨 뒤에다가 빼야 함
+	// 마지막 홀수 원소를 계속 들고 있으면 계속 끝을 찾을 필요 X
+	// 모든 원소가 홀수인지 검색하는게 좋으려나?
+
+	ListNode	*pre;
+	ListNode	*cur;
+	ListNode	*next;
+	ListNode	*last;
+	int			allOddNumFlag;
+	int			oddCount;
+
+	if (!ll || !(ll->head) || ll->size <= 1)
+		return ;
+	
+	// 마지막 노드 위치 탐색 & 모든 원소가 홀수인지 검색 
+	allOddNumFlag = 1;
+	oddCount = 0;
+	last = getLastNodeAndCheck(ll, &allOddNumFlag, &oddCount);
+	if (!last || allOddNumFlag || !oddCount)
+		return ;
+
+	// find 홀수 원소
+	pre = NULL;
+	cur = ll->head;
+	while(cur && oddCount) //oddCount -> 무한루프 방지 
+	{
+		next = cur->next;
+		if (cur->item % 2 != 0)
+		{
+			if (cur == ll->head)
+				ll->head = next;
+			if (pre != NULL)
+				pre->next = next;
+			last->next = cur;
+			cur->next = NULL;
+			last = cur;
+			cur = next;
+			oddCount--;
+		}
+		else
+		{
+			pre = cur;
+			cur = next;
+		}
+	}
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
