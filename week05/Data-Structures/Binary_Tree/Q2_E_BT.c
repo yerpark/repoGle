@@ -95,9 +95,22 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int maxHeight(BTNode *node)
-
 {
-    /* add your code here */
+    // 제귀로 작성
+    // maxHeight은 1(root) + max(left, right)
+    int     leftSubTreeMaxHeight;
+    int     rightSubTreeMaxHeight;
+
+    if (!node)
+        return (-1);
+    
+    leftSubTreeMaxHeight = maxHeight(node->left) + 1;
+    rightSubTreeMaxHeight = maxHeight(node->right) + 1;
+
+    if (leftSubTreeMaxHeight > rightSubTreeMaxHeight)
+        return leftSubTreeMaxHeight;
+    else
+        return rightSubTreeMaxHeight;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

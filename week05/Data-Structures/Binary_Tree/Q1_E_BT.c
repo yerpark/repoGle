@@ -114,9 +114,26 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int identical(BTNode *tree1, BTNode *tree2)
-
 {
-   /* add your code here */
+    // 재귀적으로 두 트리가 동일한지 확인하는 함수
+    // 동일하면 1 리턴, 아니면 0 리턴 
+    // 전위순위로 확인 root -> left -> right
+        // 전위순위로 정한 이유: root가 다르면 두 서브트리를 볼 필요 없으니까, 빠른 탐색을 위해 
+
+    if (!tree1 && !tree2)
+        return (1);
+    
+    // root 확인 -> 다르면 0 리턴
+    if ((!tree1 || !tree2) || (tree1->item != tree2->item)) //위에서 둘 다 Null인경우는 확인했으니 둘 중 하나라도 Null이면 동일하지 않은 것
+        return (0);
+    
+    if (0 == identical(tree1->left, tree2->left))
+        return (0);
+
+    if (0 == identical(tree1->right, tree2->right))
+        return(0);
+
+    return (1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////

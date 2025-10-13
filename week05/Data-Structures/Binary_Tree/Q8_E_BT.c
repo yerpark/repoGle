@@ -102,7 +102,31 @@ int main()
 
 int hasGreatGrandchild(BTNode *node)
 {
-	/* add your code here */
+	// 주어진 노드 하나에 대해서만 great grandchild가 있는지 height으로 판단
+    // 구조는 Q2와 동일, 출력은 
+    // maxHeight return
+        // main문에선 따로 안받고 있긴 하지만 함수명과 리턴발류가 불일치해서 그래도 되는가 .. 에 대한 의문.. 
+    // 후위순회로 프린트하는 이유 -> 그게  효율적임 어차피 왼 오 자식들 다 봐야해서 탐색도 후위순회로 할 수 밖에 없음. 
+        // 딱히 전위나 중위순회로 프린트할 이유가 없다면, 탐색순서랑 똑같이 프린트하는 것이 효율적. 
+
+    int     leftSubTreeMaxHeight;
+    int     rightSubTreeMaxHeight;
+    int     curMaxHeight;
+
+    if (!node)
+        return (-1);
+    
+    leftSubTreeMaxHeight = hasGreatGrandchild(node->left) + 1;
+    rightSubTreeMaxHeight = hasGreatGrandchild(node->right) + 1;
+
+    if (leftSubTreeMaxHeight > rightSubTreeMaxHeight)
+        curMaxHeight = leftSubTreeMaxHeight;
+    else
+        curMaxHeight = rightSubTreeMaxHeight;
+
+    if (3 <= curMaxHeight)
+        printf("%d ", node->item);
+    return (curMaxHeight);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

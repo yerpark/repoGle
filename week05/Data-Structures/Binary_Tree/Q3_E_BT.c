@@ -99,9 +99,19 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int countOneChildNodes(BTNode *node)
-
 {
-    /* add your code here */
+    // 재귀적으로 구하는 방식으로 구현
+    // 자식들이 자식을 몇개 가지던가랑 상관없이 자기가 한개 가지면 count 1
+    int res;
+
+    if (!node)
+        return (0);
+    
+    res = 0;
+    if ((!node->left && node->right) || (node->left && !node->right))
+        res = 1;
+    
+    return res + countOneChildNodes(node->left) + countOneChildNodes(node->right);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

@@ -105,7 +105,20 @@ int main()
 
 void mirrorTree(BTNode *node)
 {
-	/* add your code here */
+	// 재귀적으로 왼쪽 포인터 오른쪽 포인터 바꾸는 방식으로 구현
+    BTNode  *tmp;
+
+    if (!node)
+        return ;
+    
+    // bottom up 으로 바꾸기.. top down으로 바꿔도 상관은 X (swap파트가 이 파트보다 위에 올라가도 차이 X)
+    mirrorTree(node->left);
+    mirrorTree(node->right);
+
+    // swap
+    tmp = node->left;
+    node->left = node->right;
+    node->right = tmp;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

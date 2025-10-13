@@ -101,9 +101,20 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int sumOfOddNodes(BTNode *node)
-
 {
-    /* add your code here */
+    // 재귀함수로 구현
+    // 현재 노드가 홀수면 count +=1
+        // 위의 결과에 왼쪽 서브 트리의 홀수 개수, 오른쪽 서브 트리의 홀수 개수 더함
+    int res;
+
+    if (!node)
+        return (0);
+    
+    res = 0;
+    if (node->item % 2 != 0)
+        res = node->item;
+    
+    return (res + sumOfOddNodes(node->left) + sumOfOddNodes(node->right));
 }
 
 //////////////////////////////////////////////////////////////////////////////////

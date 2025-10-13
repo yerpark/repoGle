@@ -122,6 +122,7 @@ void reverse(Queue *q)
 		return ;
 	
 	tmpStack.ll.head = NULL;
+	tmpStack.ll.tail = NULL;
 	tmpStack.ll.size = 0;
 
 	while (q->ll.head)
