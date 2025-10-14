@@ -93,8 +93,37 @@ int main()
 
 void levelOrderTraversal(BSTNode* root)
 {
+	// Remember to empty the queue at the beginning, if the queue is not empty.
+	// queue에 자식 순서대로 넣으면 -> level별로 순회가능 
 
-    /* add your code here */
+	Queue		myQueue;
+	BSTNode		*temp;
+
+	if (!root)
+		return ;
+
+	myQueue.head = NULL;
+	myQueue.tail = NULL;
+
+	enqueue(&(myQueue.head), &(myQueue.tail), root);
+
+	while(myQueue.head) // 큐 내용을 다 비워야 탈출하기 때문에 뒤에 따로 클린업코드 작성 X
+	{
+		temp = dequeue(&(myQueue.head), &(myQueue.tail));
+		if (!temp)
+			return ; //break가 아니라 return인 이유: dequeue NULL 반환의 경우가 큐에 아무것도 없는 상황이라 가정 
+
+		if (temp->left)
+			enqueue(&(myQueue.head), &(myQueue.tail), temp->left);
+		if (temp->right)
+			enqueue(&(myQueue.head), &(myQueue.tail), temp->right);
+			
+		printf("%d", temp->item);
+		if (myQueue.head)
+			printf(", ");
+		else
+			printf(".");
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

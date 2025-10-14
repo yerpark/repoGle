@@ -90,7 +90,40 @@ int main()
 
 void inOrderTraversal(BSTNode *root)
 {
-	 /* add your code here */
+	// inOrder : left -> root -> right
+	// 스택: 나중에 root->right 기준으로 처리할 애들을 넣음
+		// 스택에서 pop되었을 때는 본인의 오른쪽만 보면 됨 
+	Stack		myStack;
+	BSTNode		*temp;
+
+	if (!root)
+		return ;
+
+	myStack.top = NULL;
+	temp = root;
+
+	while(temp || myStack.top)
+	{
+		// 마지막 왼쪽 노드까지 push
+		while (temp)
+		{
+			push(&myStack, temp);
+			temp = temp->left;
+		}
+
+		temp = pop(&myStack);
+		if (!temp)
+			return ;
+
+		// 본인 노드 출력
+		printf("%d", temp->item);
+		if (temp->right || myStack.top)
+			printf(", ");
+		else
+			printf(".");
+
+		temp = temp->right; // NULL이어도 괜찮음. 그럼 위에서 stack에서 pop해서 사용
+	}	
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -91,7 +91,30 @@ int main()
 
 void postOrderIterativeS1(BSTNode *root)
 {
-	 /* add your code here */
+	// left->right->root
+	// 큰 while문의 기준: subtree
+
+	// 아직 하고 있습니다!!!!!! ㅠㅠ .. 
+
+	Stack		myStack;
+	BSTNode		*cur;
+
+	if (!root)
+		return ;
+	
+	myStack.top = NULL;
+	psuh(&myStack, root);
+
+	while (cur || myStack.top)
+	{
+		cur = pop(&myStack);
+		if (!cur)
+			return ;
+
+		// 왼쪽 
+		
+		printf("%d", cur->item);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
