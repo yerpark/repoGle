@@ -55,6 +55,7 @@ int main()
 	printf("1: Insert an integer into the binary search tree;\n");
 	printf("2: Print the post-order traversal of the binary search tree;\n");
 	printf("0: Quit;\n");
+	printf("4: removeNode test\n");
 
 
 	while (c != 0)
@@ -77,6 +78,13 @@ int main()
 		case 0:
 			removeAll(&root);
 			break;
+		case 4:
+			printf("Input an integer that you want to remove in the Binary Search Tree: ");
+			scanf("%d", &i);
+			root = removeNodeFromTree(root, i);
+			postOrderIterativeS2(root);
+			printf("\n");
+			break;
 		default:
 			printf("Choice unknown;\n");
 			break;
@@ -91,18 +99,54 @@ int main()
 
 void postOrderIterativeS2(BSTNode *root)
 {
-	Stack		bigStack;
-	Stack		smallStack;
-	BSTNode		*temp;
+	Stack		myStack;
+	Stack		rootStack;
+	BSTNode		*cur;
+	BSTNode		*curRoot;
 
 	if (!root)
 		return ;
 
-	bigStack.top = NULL;
-	smallStack.top = NULL;
-	push(&bigStack, root);
+	myStack.top = NULL;
+	rootStack.top = NULL;
+
+	push(&rootStack, root);
+	push(&myStack, root);
+	cur = NULL;
+	curRoot = NULL;
 	
-	// 빨리 해보겠습니다.. 
+	while (cur || myStack.top)
+	{
+		cur = pop(&myStack);
+		if (!cur)
+			return ;
+
+		curRoot = peek(&rootStack);
+		if (curRoot && cur == curRoot)
+		{
+			pop(&rootStack);
+			push(&myStack, cur);
+			if (cur->right)
+			{
+				push(&rootStack, cur->right);
+				push(&myStack, cur->right);
+			}
+			if (cur->left)
+			{
+				push(&rootStack, cur->left);
+				push(&myStack, cur->left);
+			}
+		}
+		else
+		{
+			printf("%d", cur->item);
+			if (myStack.top)
+				printf(", ");
+			else
+				printf(".");
+			cur = NULL;
+		}
+	}
 }
 
 /* Given a binary search tree and a key, this function
@@ -110,6 +154,7 @@ void postOrderIterativeS2(BSTNode *root)
 BSTNode* removeNodeFromTree(BSTNode *root, int value)
 {
 	BSTNode	*newRoot;
+	BSTNode	*parent;
 
 	if (!root)
 		return (NULL);
@@ -132,14 +177,24 @@ BSTNode* removeNodeFromTree(BSTNode *root, int value)
 			newRoot = root->left;
 		else if (!root->left && root->right)
 			newRoot = root->right;
-		else
+		else // 오른쪽 서브트리에서 가장 작은 값 찾기(가장 작은 값 == 가장 왼쪽 값)
 		{
+			parent = root;
 			newRoot = root->right;
 			while (newRoot->left)
-				newRoot = newRoot->left;
-			root->item = newRoot->item;
-			root->right = removeNodeFromTree(root->right, value);
-			return (root);
+			{
+				parent = newRoot;
+				newRoot = newRoot->left; 
+			}
+			
+			// 자신의 부모 연결 끊기 
+			if (parent != root)
+				parent->left = NULL;
+			
+			// 원래 자신의 부모 자식들 상속
+			newRoot->left = root->left;
+			if (newRoot != root->right)
+				newRoot->right = root->right;
 		}
 		free (root);
 		root = NULL;

@@ -89,21 +89,65 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
+// void postOrderIterativeS1(BSTNode *root)
+// {
+// 	// left->right->root
+// 	// 큰 while문의 기준: subtree
+
+// 	Stack		myStack;
+// 	BSTNode		*pre;
+// 	BSTNode		*cur;
+
+// 	if (!root)
+// 		return ;
+	
+// 	myStack.top = NULL;
+// 	push(&myStack, root);
+// 	pre = NULL;
+
+// 	while (cur || myStack.top)
+// 	{
+// 		cur = pop(&myStack);
+// 		if (!cur)
+// 			return ;
+
+// 		 // 전에 방문한 노드가 자신의 오른쪽 노드라면 탐색 종료 or 리프노드일 때
+// 		if (pre == cur->right || (!cur->right && !cur->left))
+// 		{
+// 			printf("%d", cur->item);
+// 			if (myStack.top)
+// 				printf(", ");
+// 			else
+// 				printf(".");
+// 		}
+// 		else  // 아니라면 자식 추가, 자신도 스택에 넣기 
+// 		{
+// 			push(&myStack, cur);
+// 			if (cur->right)
+// 				push(&myStack, cur->right);
+// 			if (cur->left)
+// 				push(&myStack, cur->left);
+// 		}
+// 		pre = cur;
+// 	}
+// }
+
+
 void postOrderIterativeS1(BSTNode *root)
 {
-	// left->right->root
-	// 큰 while문의 기준: subtree
-
-	// 아직 하고 있습니다!!!!!! ㅠㅠ .. 
+	// node를 두번 삽입하는 방식
 
 	Stack		myStack;
 	BSTNode		*cur;
+	BSTNode		*stackTop;
 
 	if (!root)
 		return ;
 	
 	myStack.top = NULL;
-	psuh(&myStack, root);
+	cur = NULL;
+	push(&myStack, root);
+	push(&myStack, root);
 
 	while (cur || myStack.top)
 	{
@@ -111,9 +155,31 @@ void postOrderIterativeS1(BSTNode *root)
 		if (!cur)
 			return ;
 
-		// 왼쪽 
-		
-		printf("%d", cur->item);
+		stackTop = peek(&myStack);
+
+		if (stackTop && cur == stackTop) //자식 삽입
+		{
+			if (cur->right)
+			{
+				push(&myStack, cur->right);
+				push(&myStack, cur->right);
+
+			}
+			if (cur->left)
+			{
+				push(&myStack, cur->left);
+				push(&myStack, cur->left);
+			}
+		}
+		else //자기 자신 프린트 
+		{
+			printf("%d", cur->item);
+			if (myStack.top)
+				printf(", ");
+			else
+				printf(".");
+			cur = NULL;
+		}
 	}
 }
 
