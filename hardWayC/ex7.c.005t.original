@@ -1,0 +1,30 @@
+
+;; Function main (null)
+;; enabled by -tree-original
+
+
+{
+  int bugs = 100;
+  double bug_rate = 1.1999999999999999555910790149937383830547332763671875e+0;
+  long unsigned int universe_of_defects = 8070450532247928832;
+  double expected_bugs = (double) bugs * bug_rate;
+  double part_of_universe = expected_bugs / (double) universe_of_defects;
+  char nul_byte = 0;
+  int care_percentage = (int) nul_byte * bugs;
+
+    int bugs = 100;
+    double bug_rate = 1.1999999999999999555910790149937383830547332763671875e+0;
+  printf ((const char * restrict) "You have %d bugs at the imaginary rage of %f.\n", bugs, bug_rate);
+    long unsigned int universe_of_defects = 8070450532247928832;
+  printf ((const char * restrict) "The entire universe has %ld bugs.\n", universe_of_defects);
+    double expected_bugs = (double) bugs * bug_rate;
+  printf ((const char * restrict) "You are expected to have %f bugs.\n", expected_bugs);
+    double part_of_universe = expected_bugs / (double) universe_of_defects;
+  printf ((const char * restrict) "That is only a %e portion of the universe.\n", part_of_universe);
+    char nul_byte = 0;
+    int care_percentage = (int) nul_byte * bugs;
+  printf ((const char * restrict) "Which means you should care %d%%.\n", care_percentage);
+  return 0;
+}
+return 0;
+

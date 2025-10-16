@@ -99,6 +99,7 @@ int main()
 
 void postOrderIterativeS2(BSTNode *root)
 {
+	/
 	Stack		myStack;
 	Stack		rootStack;
 	BSTNode		*cur;
@@ -187,9 +188,9 @@ BSTNode* removeNodeFromTree(BSTNode *root, int value)
 				newRoot = newRoot->left; 
 			}
 			
-			// 자신의 부모 연결 끊기 
+			// 자신의 부모 연결 갱신 -> 새 루트노드의 오른쪽 자식이 없어도 괜찮.. 그러면 자동으로 NULL되면서 연결 끊어줌
 			if (parent != root)
-				parent->left = NULL;
+				parent->left = newRoot->right;
 			
 			// 원래 자신의 부모 자식들 상속
 			newRoot->left = root->left;
